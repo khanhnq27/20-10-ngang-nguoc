@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NGANG NGƯỢC — Chúc mừng 20/10</title>
+<style>
+:root{
+  --bg1:#fff6fa;
+  --bg2:#ffe9f4;
+  --accent:#d92f73;
+  --accent-2:#ff93c2;
+  --muted:#6b3340;
+  --glass: rgba(255,255,255,0.7);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;font-family:Inter, "Segoe UI", Roboto, Arial;color:var(--muted);-webkit-font-smoothing:antialiased;}
+body{
+  background: radial-gradient(800px 400px at 10% 10%, rgba(255,210,235,0.14), transparent),
+              radial-gradient(700px 300px at 90% 90%, rgba(255,240,245,0.10), transparent),
+              linear-gradient(180deg,var(--bg1),var(--bg2));
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+
+/* Stage */
+.stage{
+  width:100%;max-width:1100px;background:linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,250,252,0.96));
+  border-radius:20px;padding:22px;position:relative;overflow:hidden;
+  box-shadow:0 24px 60px rgba(140,50,90,0.10);border:1px solid rgba(217,47,115,0.06);
+}
+
+/* Top */
+.top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.logo-wrap{
+  width:110px;height:110px;padding:20px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(217,47,115,0.12);
+  flex-shrink:0;
+}
+.logo-wrap img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 6px 10px rgba(0,0,0,0.12));}
+
+.title{flex:1;min-width:200px;}
+.title h1{margin:0;font-size:24px;color:var(--accent);letter-spacing:0.6px}
+.title p{margin:6px 0 0;color:#744052;font-size:14px}
+
+.controls{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:white;border:0;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700;box-shadow:0 8px 20px rgba(217,47,115,0.18)
+}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(217,47,115,0.08);box-shadow:none}
+
+/* main */
+.main{display:flex;gap:18px;margin-top:14px;align-items:stretch;flex-wrap:wrap}
+.left{flex:1;min-width:280px}
+.right{flex:1;min-width:300px;max-width:44%}
+
+/* Card */
+.card{background:var(--glass);border-radius:14px;padding:16px;border:1px solid rgba(217,47,115,0.04);box-shadow:0 10px 28px rgba(120,50,80,0.04)}
+
+.greeting h2{margin:0;font-size:20px;color:#b11f62}
+.greeting p{margin:8px 0 0;color:#6d4450;font-size:14px}
+
+.typed-lines{margin-top:12px;min-height:160px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;overflow-y:auto;max-height:260px;}
+.line{
+  opacity:0; transform:translateY(12px); transition:all .6s cubic-bezier(.2,.9,.2,1);
+  background:linear-gradient(90deg, rgba(255,255,255,0.85), rgba(255,255,255,0.9));
+  padding:10px 14px;border-radius:10px;border:1px solid rgba(217,47,115,0.03);color:#5b3240;width:100%;
+  box-shadow:0 6px 18px rgba(150,60,100,0.03);
+}
+.line.show{opacity:1;transform:translateY(0)}
+
+/* Canvas area responsive */
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 79%; /* tỉ lệ 836/662 */
+  border-radius: 12px;
+  overflow: hidden;
+}
+#bg-canvas,
+#hearts,
+#petals {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.visualizer {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 5%;
+  height: 30%;
+  display: flex;
+  gap: 1%;
+  align-items: flex-end;
+  z-index: 20;
+}
+.bar {
+  flex: 1 1 4%;
+  background: linear-gradient(180deg, rgba(255,111,150,0.95), rgba(217,47,115,0.9));
+  border-radius: 50%;
+  transform-origin: bottom center;
+  transition: height 0.08s linear;
+}
+
+/* footer share */
+.footer{display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:12px;flex-wrap:wrap}
+.small{font-size:13px;color:#7b4761}
+.share-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.share-btn{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;text-decoration:none;border:1px solid rgba(0,0,0,0.04);
+  background:rgba(255,255,255,0.85);color:var(--accent);font-weight:700;cursor:pointer;transition:transform .18s ease, box-shadow .18s ease;
+}
+.share-btn:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(217,47,115,0.12)}
+
+.tooltip{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:#222;color:#fff;padding:8px 12px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s}
+.tooltip.show{opacity:0.96;pointer-events:auto}
+
+/* responsive */
+@media (max-width:920px){
+  .main{flex-direction:column}
+  .right{width:100%}
+  .logo-wrap{width:88px;height:88px;padding:20px}
+  .title h1{font-size:20px}
+  .title p{font-size:13px}
+}
+@media (max-width:500px){
+  .btn{padding:6px 10px;font-size:13px;}
+  .title h1{font-size:18px}
+  .title p{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <!-- Top -->
+  <div class="top">
+    <div class="logo-wrap">
+      <img src="NGANG NGƯỢC trắng (1).png" alt="Logo NGANG NGƯỢC">
+    </div>
+    <div class="title">
+      <h1>NGANG NGƯỢC — Chúc mừng 20/10</h1>
+      <p>Chúc các chị em nhóm NGANG NGƯỢC luôn rạng rỡ, cá tính và tràn đầy sức sống.</p>
+    </div>
+    <div class="controls">
+      <button class="btn" id="playBtn">▶ Phát nhạc</button>
+      <button class="btn ghost" id="pauseBtn">⏸ Dừng</button>
+      <button class="btn ghost" id="downloadBtn">⬇ Tải thiệp</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Left card -->
+    <div class="left">
+      <div class="card greeting">
+        <h2> Xin gửi lời chúc tới chị em NGANG NGƯỢC</h2>
+        <p>Những dòng sau xuất hiện nhẹ nhàng theo giai điệu — như một thiệp âm nhạc dành tặng các bạn.</p>
+        <div class="typed-lines" id="typedLines"></div>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" id="wishBtn">✨ NGANG NGƯỢC</button>
+          <button class="btn ghost" id="muteBtn">Tắt/ Bật âm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right canvas -->
+    <div class="right">
+      <div class="card canvas-wrap">
+        <canvas id="bg-canvas"></canvas>
+        <div id="hearts"></div>
+        <div id="petals"></div>
+        <div class="visualizer" id="visualizer"></div>
+        <div id="ytPlayer" style="position:absolute;left:-9999px;top:-9999px;visibility:hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="small">Made with ❤ — Dành tặng chị em NGANG NGƯỢC</div>
+    <div class="share-row">
+      <button class="share-btn" id="shareInstagram">Instagram</button>
+      <a class="share-btn" id="shareFacebook" target="_blank" rel="noopener">Facebook</a>
+      <a class="share-btn" id="shareTelegram" target="_blank" rel="noopener">Telegram</a>
+    </div>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip">Link đã sao chép</div>
+
+<!-- YouTube API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+// --- Lời chúc ---
+const lines = [
+  'Có những đóa hoa không cần khoe sắc, nhưng vẫn khiến đời thêm rực rỡ.',
+  'Có những người phụ nữ không cần dịu dàng, vì chính sự “ngang ngược” của họ làm nên nét duyên riêng.',
+  'Cảm ơn các chị em NGANG NGƯỢC — đã cùng nhau cười, cùng nhau “ngược”, và làm cho mỗi ngày thật đặc biệt.',
+  'Chúc các chị em luôn xinh đẹp, tự tin và hạnh phúc như chính giai điệu Váy Hoa Nhí đang ngân vang.',
+  'Chúc mừng ngày phụ nữ Việt Nam - 20/10 💖'
+];
+const typedLinesEl = document.getElementById('typedLines');
+lines.forEach((txt,i)=>{
+  const div = document.createElement('div');
+  div.className='line';
+  div.textContent=txt;
+  typedLinesEl.appendChild(div);
+  setTimeout(()=>{div.classList.add('show')},i*1800);
+});
+
+// --- Canvas ---
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * devicePixelRatio;
+  canvas.height = rect.height * devicePixelRatio;
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  drawBg();
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function drawBg(){
+  const w=canvas.width/devicePixelRatio;
+  const h=canvas.height/devicePixelRatio;
+  ctx.clearRect(0,0,w,h);
+  const g=ctx.createLinearGradient(0,0,w,h);
+  g.addColorStop(0,'rgba(255,250,253,0.95)');
+  g.addColorStop(1,'rgba(255,240,247,0.95)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+  for(let i=0;i<5;i++){
+    const rx=w*(0.15+i*0.16);
+    const ry=h*(0.2+(i%2)*0.22);
+    const r=Math.max(w,h)*(0.12+(i%3)*0.06);
+    const gl=ctx.createRadialGradient(rx,ry,0,rx,ry,r);
+    gl.addColorStop(0,`rgba(255,200,230,${0.05+(i*0.02)})`);
+    gl.addColorStop(1,'rgba(255,200,230,0)');
+    ctx.fillStyle=gl; ctx.beginPath(); ctx.arc(rx,ry,r,0,Math.PI*2); ctx.fill();
+  }
+}
+
+// Petals
+const petalsContainer=document.getElementById('petals');
+function rand(min,max){return Math.random()*(max-min)+min;}
+function spawnPetal(count=1){
+  for(let k=0;k<count;k++){
+    const p=document.createElement('div');
+    const size=rand(10,22);
+    p.style.position='absolute';
+    p.style.left=rand(-6,106)+'%';
+    p.style.top='-8%';
+    p.style.width=size+'px';
+    p.style.height=size+'px';
+    p.style.borderRadius='50%';
+    p.style.opacity=0.9;
+    p.style.transform=`rotate(${rand(0,360)}deg)`;
+    p.style.background=`linear-gradient(180deg,hsl(${rand(320,345)},80%,86%),hsl(${rand(300,335)},80%,78%))`;
+    p.style.filter='drop-shadow(0 6px 10px rgba(190,80,120,0.12))';
+    p.style.zIndex=8;
+    petalsContainer.appendChild(p);
+    const duration=rand(6000,12000);
+    const endX = parseFloat(p.style.left) + rand(-18,18);
+    p.animate([
+      { transform:`translateY(0) rotate(${rand(0,360)}deg)`, left:p.style.left, opacity:1 },
+      { transform:`translateY(115vh) rotate(${rand(720,1080)}deg)`, left:`${endX}%`, opacity:0.04 }
+    ],{ duration: duration, easing:'cubic-bezier(.2,.8,.2,1)' });
+    setTimeout(()=>{try{p.remove();}catch(e){}}, duration+200);
+  }
+}
+setInterval(()=>spawnPetal(),1400);
+
+// Hearts
+const heartsContainer=document.getElementById('hearts');
+function spawnHeart(opts={}){
+  const h=document.createElement('div');
+  const size=opts.size||rand(18,46);
+  h.style.position='absolute';
+  h.style.left=(opts.left||rand(6,92))+'%';
+  h.style.top='100%';
+  h.style.width=size+'px';
+  h.style.height=size+'px';
+  h.style.pointerEvents='none';
+  h.style.zIndex=9;
+  const color=opts.color||`hsl(${rand(320,345)}deg 80% 75%)`;
+  h.innerHTML=`<svg viewBox="0 0 24 24" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-4.5-9-7.5C1.2 11.4 4 7 8 7c2.3 0 3.1 1.5 4 1.5s1.7-1.5 4-1.5c4 0 6.8 4.4 5 6.5C19 16.5 12 21 12 21z" fill="${color}" opacity="0.95"/></svg>`;
+  heartsContainer.appendChild(h);
+  const duration=opts.duration||rand(6000,12000);
+  const anim=h.animate([
+    { transform:'translateY(0) scale(1)',opacity:1 },
+    { transform:`translateY(-120vh) scale(${rand(0.7,1.1)})`,opacity:0.06 }
+  ],{duration:duration,easing:'cubic-bezier(.2,.8,.2,1)'});
+  anim.onfinish=()=>{try{h.remove();}catch(e){}};
+}
+setInterval(()=>spawnHeart({size:rand(16,26)}),900);
+
+// Visualizer
+const viz=document.getElementById('visualizer');
+for(let i=0;i<18;i++){const b=document.createElement('div');b.className='bar';b.style.height='8px';viz.appendChild(b);}
+function animateVisualizer(){
+  const bars=Array.from(viz.children);
+  requestAnimationFrame(animateVisualizer);
+  const t=performance.now()/300;
+  bars.forEach((b,i)=>{const v=Math.max(0,Math.sin(t+i*0.3)*0.6+Math.random()*0.4);b.style.height=Math.max(6,Math.round(v*72))+'px';b.style.opacity=0.4+v*0.6;});
+}
+animateVisualizer();
+
+// YouTube Player
+let youtubePlayer;
+function onYouTubeIframeAPIReady(){youtubePlayer=new YT.Player('ytPlayer',{
+  height:'0', width:'0', videoId:'MrJowBhEyjg',
+  playerVars:{ autoplay:1, controls:0, loop:1, playlist:'MrJowBhEyjg', modestbranding:1, rel:0, showinfo:0, mute:1 }
+});}
+
+// Play/Pause buttons
+document.getElementById('playBtn').addEventListener('click',()=>{if(youtubePlayer)youtubePlayer.unMute();youtubePlayer.playVideo();});
+document.getElementById('pauseBtn').addEventListener('click',()=>{if(youtubePlayer)youtubePlayer.pauseVideo();});
+
+// Copy/share tooltip
+const tooltip=document.getElementById('tooltip');
+document.getElementById('shareInstagram').addEventListener('click',()=>{
+  navigator.clipboard.writeText(window.location.href); tooltip.classList.add('show');
+  setTimeout(()=>tooltip.classList.remove('show'),1800);
+});
+document.getElementById('shareFacebook').href=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+document.getElementById('shareTelegram').href=`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}`;
+</script>
+</body>
+</html>
